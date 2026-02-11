@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Night 💕</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 50%, #ffecd2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating hearts background animation */
+        .heart-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .floating-heart {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.3;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 20px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 3.5em;
+            color: #ff1744;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(255, 23, 68, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #d81b60;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 30px;
+            border-radius: 25px;
+            box-shadow: 0 8px 20px rgba(255, 23, 68, 0.2);
+            font-weight: 600;
+            color: #d81b60;
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 0 auto;
+            max-width: 600px;
+            perspective: 1000px;
+        }
+
+        .card {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%);
+            border-radius: 20px;
+            cursor: pointer;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            box-shadow: 0 8px 20px rgba(255, 23, 68, 0.3);
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card.matched {
+            opacity: 0.6;
+            cursor: default;
+            animation: matchPulse 0.5s;
+        }
+
+        @keyframes matchPulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 20px;
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%);
+            font-size: 3em;
+        }
+
+        .card-back {
+            background: white;
+            transform: rotateY(180deg);
+            padding: 10px;
+        }
+
+        .card-back img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .controls {
+            margin-top: 30px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #ff1744 0%, #ff4081 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(255, 23, 68, 0.4);
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(255, 23, 68, 0.5);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        .music-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+            box-shadow: 0 8px 20px rgba(255, 23, 68, 0.3);
+            transition: all 0.3s;
+        }
+
+        .music-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #fff 0%, #ffe0e6 100%);
+            padding: 50px;
+            border-radius: 30px;
+            text-align: center;
+            max-width: 500px;
+            animation: modalAppear 0.5s;
+            box-shadow: 0 20px 60px rgba(255, 23, 68, 0.4);
+        }
+
+        @keyframes modalAppear {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-content h2 {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.5em;
+            color: #ff1744;
+            margin-bottom: 20px;
+        }
+
+        .modal-content p {
+            font-size: 1.3em;
+            color: #d81b60;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .modal-hearts {
+            font-size: 3em;
+            margin: 20px 0;
+            animation: heartBeat 1s infinite;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.2);
+            }
+            50% {
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.5em;
+            }
+
+            .game-board {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+
+            .modal-content {
+                padding: 30px;
+                margin: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="heart-bg" id="heartBg"></div>
+
+    <button class="music-toggle" id="musicToggle" onclick="toggleMusic()">🔇</button>
+
+    <audio id="bgMusic" loop>
+        <!-- Background music will be added via JavaScript with a romantic tune -->
+    </audio>
+
+    <div class="container">
+        <h1>Date Night 💕</h1>
+        <p class="subtitle">Made with love for Nevaeh</p>
+
+        <div class="game-info">
+            <div class="info-item">
+                <span>Moves: <span id="moves">0</span></span>
+            </div>
+            <div class="info-item">
+                <span>Matches: <span id="matches">0</span>/6</span>
+            </div>
+        </div>
+
+        <div class="game-board" id="gameBoard"></div>
+
+        <div class="controls">
+            <button onclick="resetGame()">Start Over 💖</button>
+        </div>
+    </div>
+
+    <div class="modal" id="winModal">
+        <div class="modal-content">
+            <h2>You Did It! 🎉</h2>
+            <div class="modal-hearts">💕💖💗</div>
+            <p>I love you infinity, I am so happy and blessed to spend Valentine's Day with my person</p>
+            <button onclick="closeModal()">Play Again 💝</button>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        let cards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let moves = 0;
+        let canFlip = true;
+
+        // Image paths - YOU WILL REPLACE THESE WITH YOUR ACTUAL PHOTO PATHS
+        const images = [
+            'photo1.jpg',
+            'photo2.jpg',
+            'photo3.jpg',
+            'photo4.jpg',
+            'photo5.jpg',
+            'photo6.jpg'
+        ];
+
+        // Create floating hearts background
+        function createFloatingHearts() {
+            const heartBg = document.getElementById('heartBg');
+            const hearts = ['💕', '💖', '💗', '💝', '💓', '💞'];
+            
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 15 + 's';
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                heartBg.appendChild(heart);
+            }
+        }
+
+        // Initialize game
+        function initGame() {
+            // Create pairs of cards
+            cards = [...images, ...images]
+                .map((image, index) => ({
+                    id: index,
+                    image: image,
+                    matched: false
+                }))
+                .sort(() => Math.random() - 0.5);
+
+            renderBoard();
+            createFloatingHearts();
+        }
+
+        // Render game board
+        function renderBoard() {
+            const gameBoard = document.getElementById('gameBoard');
+            gameBoard.innerHTML = '';
+
+            cards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card';
+                cardElement.dataset.index = index;
+                cardElement.onclick = () => flipCard(index);
+
+                cardElement.innerHTML = `
+                    <div class="card-front">❤️</div>
+                    <div class="card-back">
+                        <img src="${card.image}" alt="Memory ${index}">
+                    </div>
+                `;
+
+                gameBoard.appendChild(cardElement);
+            });
+        }
+
+        // Flip card
+        function flipCard(index) {
+            if (!canFlip) return;
+            if (flippedCards.length === 2) return;
+            if (flippedCards.includes(index)) return;
+            if (cards[index].matched) return;
+
+            const cardElement = document.querySelectorAll('.card')[index];
+            cardElement.classList.add('flipped');
+            flippedCards.push(index);
+
+            if (flippedCards.length === 2) {
+                moves++;
+                document.getElementById('moves').textContent = moves;
+                checkMatch();
+            }
+        }
+
+        // Check for match
+        function checkMatch() {
+            canFlip = false;
+            const [index1, index2] = flippedCards;
+
+            if (cards[index1].image === cards[index2].image) {
+                // Match found!
+                setTimeout(() => {
+                    cards[index1].matched = true;
+                    cards[index2].matched = true;
+                    
+                    const cardElements = document.querySelectorAll('.card');
+                    cardElements[index1].classList.add('matched');
+                    cardElements[index2].classList.add('matched');
+
+                    matchedPairs++;
+                    document.getElementById('matches').textContent = matchedPairs;
+
+                    flippedCards = [];
+                    canFlip = true;
+
+                    // Check for win
+                    if (matchedPairs === 6) {
+                        setTimeout(() => showWinModal(), 500);
+                    }
+                }, 500);
+            } else {
+                // No match
+                setTimeout(() => {
+                    const cardElements = document.querySelectorAll('.card');
+                    cardElements[index1].classList.remove('flipped');
+                    cardElements[index2].classList.remove('flipped');
+                    flippedCards = [];
+                    canFlip = true;
+                }, 1000);
+            }
+        }
+
+        // Show win modal
+        function showWinModal() {
+            document.getElementById('winModal').classList.add('active');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('winModal').classList.remove('active');
+            resetGame();
+        }
+
+        // Reset game
+        function resetGame() {
+            matchedPairs = 0;
+            moves = 0;
+            flippedCards = [];
+            canFlip = true;
+            document.getElementById('moves').textContent = 0;
+            document.getElementById('matches').textContent = 0;
+            initGame();
+        }
+
+        // Music controls
+        let musicPlaying = false;
+        const bgMusic = document.getElementById('bgMusic');
+        
+        // Using a romantic royalty-free tune (you can replace with your own)
+        bgMusic.src = 'https://cdn.pixabay.com/download/audio/2022/03/10/audio_4a3f9c6b56.mp3';
+
+        function toggleMusic() {
+            const musicToggle = document.getElementById('musicToggle');
+            if (musicPlaying) {
+                bgMusic.pause();
+                musicToggle.textContent = '🔇';
+                musicPlaying = false;
+            } else {
+                bgMusic.play();
+                musicToggle.textContent = '🔊';
+                musicPlaying = true;
+            }
+        }
+
+        // Initialize on load
+        window.onload = initGame;
+    </script>
+</body>
+</html>
